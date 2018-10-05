@@ -54,11 +54,13 @@ android {
             dimension "version"
             applicationIdSuffix ".general"
             versionNameSuffix "-general"
+            manifestPlaceholders.screenOrientation = "portrait"
         }
         dev {
             dimension "version"
             applicationIdSuffix ".dev"
             versionNameSuffix "-dev"
+            manifestPlaceholders.screenOrientation = "unspecified"
         }
     }
 }

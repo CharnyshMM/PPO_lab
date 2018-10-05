@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PPO_lab</string>
+    <string name="Version">Version</string>
+    <string name="IMEI">IMEI</string>
 </resources>

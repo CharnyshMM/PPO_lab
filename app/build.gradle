@@ -1,12 +1,20 @@
 apply plugin: 'com.android.application'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+def keystoreProperties = new Properties()
+
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
+
 android {
     signingConfigs {
         signingConfig {
-            keyAlias 'key0'
-            keyPassword 'iphone5s'
-            storeFile file('C:/Users/mikit/keystores/android.jks')
-            storePassword 'iphone5s'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
     def getCommitsCount = { ->

@@ -29,10 +29,11 @@ android {
     def getTag = { ->
         def stdout = new ByteArrayOutputStream()
         exec {
-            commandLine 'git', 'describe', '--tags', '--abbrev=0'
+            commandLine 'git', 'describe', '--tags'
             standardOutput = stdout
         }
-        return stdout.toString().trim()
+        def result = stdout.toString().trim().split('-');
+        return result[0]+"."+result[1]
     }
     compileSdkVersion 28
     defaultConfig {

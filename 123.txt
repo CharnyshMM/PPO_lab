@@ -255,4 +255,4 @@ dependencies {
 storePassword=iphone5s
 keyPassword=iphone5s
 keyAlias=key0
-storeFile=C:/Users/mikit/keystores/android.jks
+storeFile=C:/Users/mikit/keystores/android.jkstest

@@ -1,10 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation_graph"
-    app:startDestination="@id/mainFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/profileFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.example.mikita.ppo_lab.MainFragment"
-        android:label="MainFragment" />
+        android:id="@+id/newsFragment"
+        android:name="com.example.mikita.ppo_lab.NewsFragment"
+        android:label="fragment_news"
+        tools:layout="@layout/fragment_news" >
+        <action
+            android:id="@+id/action_newsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_newsFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.mikita.ppo_lab.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.mikita.ppo_lab.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" >
+        <action
+            android:id="@+id/action_favoritesFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+    <!--<fragment-->
+        <!--android:id="@+id/news_fragment"-->
+        <!--android:name="com.example.mikita.ppo_lab.NewsFragment"-->
+        <!--android:label="NewsFragment" />-->
+
+    <!--<fragment-->
+        <!--android:id="@+id/profile_fragment"-->
+        <!--android:name="com.example.mikita.ppo_lab.ProfileFragment"-->
+        <!--android:label="ProfileFragment" />-->
+
+    <!--<fragment-->
+        <!--android:id="@+id/favorites_fragment"-->
+        <!--android:name="com.example.mikita.ppo_lab.FavoritesFragment"-->
+        <!--android:label="FavoritesFragment" />-->
+
 </navigation>

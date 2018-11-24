@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/newsFragment"
-
+        android:icon="@drawable/news_menu_icon"
         android:title="News"/>
 
     <item
         android:id="@+id/profileFragment"
-
+        android:icon="@drawable/profile_menu_icon"
         android:title="Profile"/>
 
     <item
         android:id="@+id/favoritesFragment"
-
+        android:icon="@drawable/favorites_menu_icon"
         android:title="Favorites"/>
 </menu>

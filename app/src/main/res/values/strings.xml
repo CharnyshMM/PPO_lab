@@ -5,4 +5,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="DEFAULT_NAME">User</string>
+    <string name="default_phone">+3751234567890</string>
+    <string name="default_email">usermail@example.by</string>
+    <string name="button_save">Save</string>
+    <string name="button_edit">Edit</string>
 </resources>

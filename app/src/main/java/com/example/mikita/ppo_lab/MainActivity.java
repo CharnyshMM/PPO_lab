@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
@@ -26,10 +28,12 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,
         NewsFragment.OnFragmentInteractionListener, FavoritesFragment.OnFragmentInteractionListener,
-        EditProfileFragment.OnFragmentInteractionListener
+        EditProfileFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener
 {
     private static final int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
+    private NavController navController;
+    private BottomNavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +41,11 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("PPO_JAVA");
+        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.my_nav_hos_f);
-        BottomNavigationView navigationView = (BottomNavigationView) findViewById(R.id.main__bottom_navigation_view);
+        navController = Navigation.findNavController(this, R.id.my_nav_hos_f);
+        navigationView = (BottomNavigationView) findViewById(R.id.main__bottom_navigation_view);
         NavigationUI.setupWithNavController(navigationView, navController);
 
         FirebaseApp.initializeApp(this);
@@ -60,6 +64,17 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_bar_menu__action_about:
+                  navController.navigate(R.id.aboutFragment);
+                  return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // RC_SIGN_IN is the request code you passed into startActivityForResult(...) when starting the sign in flow.
@@ -69,10 +84,12 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
             if (resultCode == RESULT_OK) {
                 return;
             } else {
-                // Sign in failed
+
+                navigationView.setVisibility(View.GONE);
+
                 if (response == null) {
                     // User pressed back button
-                    Toast.makeText(this, "shit, why did you pressed back???", Toast.LENGTH_LONG);
+                    Toast.makeText(this, "shit, why did you pressed back???", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -82,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
                 }
 
                 Toast.makeText(this, "unknown error", Toast.LENGTH_LONG);
+
 
                 Log.e("MAIN ACTIVITY", "Sign-in error: ", response.getError());
             }

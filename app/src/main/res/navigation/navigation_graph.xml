@@ -9,41 +9,27 @@
         android:id="@+id/newsFragment"
         android:name="com.example.mikita.ppo_lab.NewsFragment"
         android:label="fragment_news"
-        tools:layout="@layout/fragment_news" >
-        <action
-            android:id="@+id/action_newsFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_newsFragment_to_favoritesFragment"
-            app:destination="@id/favoritesFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_news" ></fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.mikita.ppo_lab.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile">
         <action
-            android:id="@+id/action_profileFragment_to_newsFragment"
-            app:destination="@id/newsFragment" />
-        <action
             android:id="@+id/action_profileFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_newsFragment"
+            app:destination="@id/newsFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.mikita.ppo_lab.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" >
-        <action
-            android:id="@+id/action_favoritesFragment_to_newsFragment"
-            app:destination="@id/newsFragment" />
-        <action
-            android:id="@+id/action_favoritesFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_favorites" ></fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.mikita.ppo_lab.EditProfileFragment"
@@ -53,6 +39,11 @@
             android:id="@+id/action_editProfileFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.mikita.ppo_lab.AboutFragment"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" ></fragment>
 
     <!--<fragment-->
         <!--android:id="@+id/news_fragment"-->

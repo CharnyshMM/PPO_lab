@@ -11,7 +11,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -32,6 +35,11 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("PPO_JAVA");
+        setSupportActionBar(toolbar);
+
         NavController navController = Navigation.findNavController(this, R.id.my_nav_hos_f);
         BottomNavigationView navigationView = (BottomNavigationView) findViewById(R.id.main__bottom_navigation_view);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -45,6 +53,13 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_menu, menu);
+        return true;
+    }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // RC_SIGN_IN is the request code you passed into startActivityForResult(...) when starting the sign in flow.
@@ -52,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
             IdpResponse response = IdpResponse.fromResultIntent(data);
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                finish();
+                return;
             } else {
                 // Sign in failed
                 if (response == null) {

@@ -11,6 +11,10 @@ https://www.youtube.com/watch?v=GOpeBbfyb6s
 ПО логике, в `debug/` кладется только то, что будет использовано только в Дебаг-варианте проги. Для него отдельный пакет, другой класс R, .... А фрагменты будут использованы в любом варианте сборки проекта. Поэтому они должны быть в папке `java/`.
 
 
+## 3 лаба
+
 https://www.youtube.com/watch?v=IYJHQnZPAFk
 
 https://icons8.com/icon/set/news/all
+
+https://console.firebase.google.com/project/ppolab-796f0/overview

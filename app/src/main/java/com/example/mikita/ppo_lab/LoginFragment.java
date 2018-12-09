@@ -1,37 +1,25 @@
 package com.example.mikita.ppo_lab;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.database.DatabaseReference;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EditProfileFragment.OnFragmentInteractionListener} interface
+ * {@link LoginFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link EditProfileFragment#newInstance} factory method to
+ * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EditProfileFragment extends Fragment {
+public class LoginFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -41,17 +29,9 @@ public class EditProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private Button saveButton;
-    private EditText emailEditText;
-    private EditText phoneEditText;
-    private EditText nameEditText;
-    private EditText surnameEditText;
-
-    private UserDM userDM;
-
     private OnFragmentInteractionListener mListener;
 
-    public EditProfileFragment() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
@@ -61,11 +41,11 @@ public class EditProfileFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment EditProfileFragment.
+     * @return A new instance of fragment LoginFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditProfileFragment newInstance(String param1, String param2) {
-        EditProfileFragment fragment = new EditProfileFragment();
+    public static LoginFragment newInstance(String param1, String param2) {
+        LoginFragment fragment = new LoginFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -86,40 +66,8 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        return inflater.inflate(R.layout.fragment_login, container, false);
     }
-
-    @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        saveButton = (Button) view.findViewById(R.id.editProfile__save_button);
-        emailEditText = (EditText) view.findViewById(R.id.editProfile__email_textView);
-        nameEditText = (EditText) view.findViewById(R.id.editProfile__name_editText);
-        surnameEditText = (EditText) view.findViewById(R.id.editProfile__surname_editText);
-        phoneEditText = (EditText) view.findViewById(R.id.editProfile__phone_textView);
-        userDM = UserRepository.getInstance().getUser();
-
-        nameEditText.setText(userDM.getName());
-        surnameEditText.setText(userDM.getSurname());
-        emailEditText.setText(userDM.getEmail());
-        phoneEditText.setText(userDM.getPhone());
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UserDM userDM = new UserDM();
-                userDM.setName(nameEditText.getText().toString());
-                userDM.setSurname(surnameEditText.getText().toString());
-                userDM.setEmail(emailEditText.getText().toString());
-                userDM.setPhone(phoneEditText.getText().toString());
-                UserRepository.getInstance().setUser(userDM);
-                Navigation.findNavController(view).navigate(R.id.profileFragment);
-            }
-        });
-    }
-
-
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

@@ -2,6 +2,8 @@
     <string name="app_name">PPO_lab</string>
     <string name="Version">Version</string>
     <string name="IMEI">IMEI</string>
+    <string name="button_sigin">Sign In</string>
+    <string name="please_sign_in">To use app please Sign In</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="DEFAULT_NAME">User</string>

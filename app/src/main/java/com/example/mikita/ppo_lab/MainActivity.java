@@ -1,10 +1,9 @@
 package com.example.mikita.ppo_lab;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
@@ -22,18 +21,28 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,
         NewsFragment.OnFragmentInteractionListener, FavoritesFragment.OnFragmentInteractionListener,
-        EditProfileFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener
+        EditProfileFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener,
+        LoginFragment.OnFragmentInteractionListener
 {
+    private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     private NavController navController;
     private BottomNavigationView navigationView;
+    private FirebaseUser firebaseUser;
+    private UserDM userDM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +59,14 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
 
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
-        if (mAuth.getCurrentUser() != null) {
-            //vse ok
+        firebaseUser = mAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            navController.navigate(R.id.profileFragment);
+            mDatabase = FirebaseDatabase.getInstance().getReference();
         } else {
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), RC_SIGN_IN);
         }
+
     }
 
     @Override
@@ -82,10 +94,11 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
             IdpResponse response = IdpResponse.fromResultIntent(data);
             // Successfully signed in
             if (resultCode == RESULT_OK) {
-                return;
+                navController.navigate(R.id.profileFragment);
             } else {
 
                 navigationView.setVisibility(View.GONE);
+//              navController.navigate(R.id.loginFragment);
 
                 if (response == null) {
                     // User pressed back button
@@ -101,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
                 Toast.makeText(this, "unknown error", Toast.LENGTH_LONG);
 
 
-                Log.e("MAIN ACTIVITY", "Sign-in error: ", response.getError());
+                Log.e(TAG, "Sign-in error: ", response.getError());
             }
         }
     }
@@ -111,3 +124,4 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
 
     }
 }
+

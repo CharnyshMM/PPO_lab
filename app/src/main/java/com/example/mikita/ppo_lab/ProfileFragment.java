@@ -4,14 +4,26 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.firebase.*;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 /**
@@ -28,11 +40,22 @@ public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static final String TAG = "ProfileFragment";
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private Button editButton;
+    private TextView emailTextView;
+    private TextView phoneTextView;
+    private TextView nameTextView;
+    private TextView surnameTextView;
+
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
+    private UserDM userDM;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -77,9 +100,30 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         editButton = getView().findViewById(R.id.profile__edit_button);
+        nameTextView = view.findViewById(R.id.profile__name_textView);
+        surnameTextView = view.findViewById(R.id.profile__surname_textView);
+        emailTextView = view.findViewById(R.id.profile__email_textView);
+        phoneTextView = view.findViewById(R.id.profile__phone_textView);
+
         editButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_profileFragment_to_editProfileFragment));
+
+        UserRepository rep = UserRepository.getInstance();
+        setUI(rep.getUser());
+
+        rep.addOnUserDMUpdatedListener(new UserRepository.OnUserDMUpdatedListener() {
+            @Override
+            public void OnUserUpdated(UserDM user) {
+                setUI(user);
+            }
+        });
     }
 
+    private void setUI(UserDM user) {
+        nameTextView.setText(user.getName());
+        surnameTextView.setText(user.getSurname());
+        emailTextView.setText(user.getEmail());
+        phoneTextView.setText(user.getPhone());
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

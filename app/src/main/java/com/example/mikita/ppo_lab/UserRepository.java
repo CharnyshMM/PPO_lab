@@ -29,7 +29,7 @@ public class UserRepository implements ValueEventListener {
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseUser = firebaseAuth.getCurrentUser();
-        user = new UserDM();
+        user = null;
         databaseReference.child("users").child(firebaseUser.getUid()).addValueEventListener(this);
         userDMUpdatedListeners = new ArrayList<OnUserDMUpdatedListener>();
     }

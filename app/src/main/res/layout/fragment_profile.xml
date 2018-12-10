@@ -26,6 +26,7 @@
                 android:paddingBottom="10dp">
 
             <ImageView
+                android:id="@+id/profile__avatarView"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_margin="9dp"

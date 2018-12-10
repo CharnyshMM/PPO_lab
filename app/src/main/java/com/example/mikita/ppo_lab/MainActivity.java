@@ -7,13 +7,16 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
@@ -30,13 +33,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity implements ProfileFragment.OnFragmentInteractionListener,
         NewsFragment.OnFragmentInteractionListener, FavoritesFragment.OnFragmentInteractionListener,
-        EditProfileFragment.OnFragmentInteractionListener, AboutFragment.OnFragmentInteractionListener,
+        EditProfileFragment.OnAvatarImageClickListener, AboutFragment.OnFragmentInteractionListener,
         LoginFragment.OnFragmentInteractionListener
 {
+
+
     private static final String TAG = "MainActivity";
     private static final int RC_SIGN_IN = 123;
+    private static final int RC_PICK_IMAGE_REQUEST = 1234;
+
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private NavController navController;
@@ -116,12 +125,25 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
 
                 Log.e(TAG, "Sign-in error: ", response.getError());
             }
+        } else if (requestCode == RC_PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            AvatarRepository.getInstance().setAvatar(uri);
         }
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onAvatarImageClick() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
+                RC_PICK_IMAGE_REQUEST);
     }
 }
 

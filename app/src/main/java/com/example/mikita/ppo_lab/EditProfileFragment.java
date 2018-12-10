@@ -2,6 +2,10 @@ package com.example.mikita.ppo_lab;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,11 +27,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.File;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EditProfileFragment.OnFragmentInteractionListener} interface
+ * {@link EditProfileFragment.OnAvatarImageClickListener} interface
  * to handle interaction events.
  * Use the {@link EditProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -41,15 +48,19 @@ public class EditProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+
     private Button saveButton;
     private EditText emailEditText;
     private EditText phoneEditText;
     private EditText nameEditText;
     private EditText surnameEditText;
+    private ImageView avatarView;
 
     private UserDM userDM;
 
-    private OnFragmentInteractionListener mListener;
+    private OnAvatarImageClickListener mListener;
+
+    private AvatarRepository.OnAvatarDownloadedListener onAvatarDownloadedListener;
 
     public EditProfileFragment() {
         // Required empty public constructor
@@ -98,6 +109,23 @@ public class EditProfileFragment extends Fragment {
         nameEditText = (EditText) view.findViewById(R.id.editProfile__name_editText);
         surnameEditText = (EditText) view.findViewById(R.id.editProfile__surname_editText);
         phoneEditText = (EditText) view.findViewById(R.id.editProfile__phone_textView);
+        avatarView = (ImageView) view.findViewById(R.id.editProfile__avatarView);
+
+        setFileAsAvatar(AvatarRepository.getInstance().getAvatarFile());
+
+        onAvatarDownloadedListener = new AvatarRepository.OnAvatarDownloadedListener() {
+            @Override
+            public void onAvatarDownloaded(File avatar) {
+                setFileAsAvatar(avatar);
+            }
+
+            @Override
+            public void onAvatarDownloadFailure(Exception e) {
+                e = e;
+            }
+        };
+        AvatarRepository.getInstance().addOnAvatarDownloadedListener(onAvatarDownloadedListener);
+
         userDM = UserRepository.getInstance().getUser();
 
         nameEditText.setText(userDM.getName());
@@ -117,22 +145,36 @@ public class EditProfileFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.profileFragment);
             }
         });
+
+        avatarView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onAvatarImageClick();
+                }
+            }
+        });
     }
 
-
+    private void setFileAsAvatar(File file) {
+        if (file == null)
+            return;
+        Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        avatarView.setImageBitmap(myBitmap);
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onAvatarImageClick();
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnAvatarImageClickListener) {
+            mListener = (OnAvatarImageClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -143,6 +185,7 @@ public class EditProfileFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        AvatarRepository.getInstance().removeOnAvatarDownloadedListener(onAvatarDownloadedListener);
     }
 
     /**
@@ -155,8 +198,8 @@ public class EditProfileFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnAvatarImageClickListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onAvatarImageClick();
     }
 }

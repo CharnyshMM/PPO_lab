@@ -125,10 +125,11 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
 
                 Log.e(TAG, "Sign-in error: ", response.getError());
             }
-        } else if (requestCode == RC_PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
-            AvatarRepository.getInstance().setAvatar(uri);
         }
+//        } else if (requestCode == RC_PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+//            Uri uri = data.getData();
+//            AvatarRepository.getInstance().setAvatar(uri);
+//        }
     }
 
     @Override

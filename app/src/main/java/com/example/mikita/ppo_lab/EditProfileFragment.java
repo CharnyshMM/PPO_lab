@@ -29,6 +29,8 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.io.File;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +50,7 @@ public class EditProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private static final int RC_PICK_IMAGE_REQUEST = 1234;
 
     private Button saveButton;
     private EditText emailEditText;
@@ -57,6 +60,8 @@ public class EditProfileFragment extends Fragment {
     private ImageView avatarView;
 
     private UserDM userDM;
+
+    private Uri selectedAvatarUri;
 
     private OnAvatarImageClickListener mListener;
 
@@ -111,6 +116,8 @@ public class EditProfileFragment extends Fragment {
         phoneEditText = (EditText) view.findViewById(R.id.editProfile__phone_textView);
         avatarView = (ImageView) view.findViewById(R.id.editProfile__avatarView);
 
+        selectedAvatarUri = null;
+
         setFileAsAvatar(AvatarRepository.getInstance().getAvatarFile());
 
         onAvatarDownloadedListener = new AvatarRepository.OnAvatarDownloadedListener() {
@@ -142,6 +149,11 @@ public class EditProfileFragment extends Fragment {
                 userDM.setEmail(emailEditText.getText().toString());
                 userDM.setPhone(phoneEditText.getText().toString());
                 UserRepository.getInstance().setUser(userDM);
+
+                if (selectedAvatarUri != null) {
+                    AvatarRepository.getInstance().setAvatar(selectedAvatarUri);
+                }
+
                 Navigation.findNavController(view).navigate(R.id.profileFragment);
             }
         });
@@ -149,9 +161,10 @@ public class EditProfileFragment extends Fragment {
         avatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mListener != null) {
-                    mListener.onAvatarImageClick();
-                }
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), RC_PICK_IMAGE_REQUEST);
             }
         });
     }
@@ -186,6 +199,16 @@ public class EditProfileFragment extends Fragment {
         super.onDetach();
         mListener = null;
         AvatarRepository.getInstance().removeOnAvatarDownloadedListener(onAvatarDownloadedListener);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            selectedAvatarUri = data.getData();
+            avatarView.setImageURI(selectedAvatarUri);
+        }
     }
 
     /**

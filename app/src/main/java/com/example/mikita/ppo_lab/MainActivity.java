@@ -3,6 +3,7 @@ package com.example.mikita.ppo_lab;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -70,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements ProfileFragment.O
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
         if (firebaseUser != null) {
-            navController.navigate(R.id.profileFragment);
+            NavOptions.Builder navBuilder = new NavOptions.Builder();
+            NavOptions navOptions = navBuilder.setClearTask(true).build();
+            navController.navigate(R.id.profileFragment, null, navOptions);
             mDatabase = FirebaseDatabase.getInstance().getReference();
         } else {
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), RC_SIGN_IN);

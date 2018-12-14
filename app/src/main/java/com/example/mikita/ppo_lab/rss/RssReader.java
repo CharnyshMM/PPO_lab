@@ -21,9 +21,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class RssReader extends AsyncTask<Void, Void, Void> {
-    String address;
-    ArrayList<FeedItem> feedItems;
-    URL url;
+
+    protected String address;
+    protected ArrayList<FeedItem> feedItems;
+    protected URL url;
 
     public RssReader(Context context,  String address) {
         this.address = address;
@@ -40,7 +41,6 @@ public class RssReader extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        notifyOnItemsLoaded();
     }
 
     public interface OnItemsLoadedListener {
@@ -128,20 +128,9 @@ public class RssReader extends AsyncTask<Void, Void, Void> {
                         feedItem.setLink(node.getTextContent());
                     } else if (node.getNodeName().equalsIgnoreCase("media:thumbnail")
                             || node.getNodeName().equalsIgnoreCase("media:content")) {
-                        //this will return us thumbnail url
                         String url = node.getAttributes().item(0).getTextContent();
                         feedItem.setThumbnailUrl(url);
                     }else if (node.getNodeName().equalsIgnoreCase("description")) {
-                        // TODO: add tut.by style support for img in description
-//                        if (feedItem.getThumbnailUrl() == null) {
-//                            NodeList descriptionChildren = node.getChildNodes();
-//                            for (int i = 0; i < descriptionChildren.getLength(); i++) {
-//                                Node descriptionChild = descriptionChildren.item(i);
-//                                if (descriptionChild.getNodeName().equalsIgnoreCase("img")) {
-//                                    feedItem.setThumbnailUrl(descriptionChild.getAttributes());
-//                                }
-//                            }
-//                        }
                         feedItem.setDescription(node.getTextContent());
                     }
                 }
@@ -149,6 +138,7 @@ public class RssReader extends AsyncTask<Void, Void, Void> {
                 notifyOnFeedItemLoaded(feedItem);
             }
         }
+        notifyOnItemsLoaded();
     }
 
     public Document getData() {

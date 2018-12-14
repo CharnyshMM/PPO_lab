@@ -1,6 +1,8 @@
 package com.example.mikita.ppo_lab;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,17 +16,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mikita.ppo_lab.rss.FeedItem;
 import com.example.mikita.ppo_lab.rss.FeedsAdapter;
 import com.example.mikita.ppo_lab.rss.RssReader;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
-public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoadedListener {
+public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoadedListener, RssReader.OnItemsLoadedListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -38,6 +43,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
     private RecyclerView recyclerView;
     private FeedsAdapter feedsAdapter;
     private String address;
+    private RssReader rssReader;
     FeedsAdapter.OnItemClickListener onItemClickListener;
 
     public NewsFragment() {
@@ -69,6 +75,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -91,32 +98,82 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
                 startActivity(intent);
             }
         };
+        readRss(address);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.newsFragment__menu__change_source:
+                showRssSourceInputDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void readRss(String address) {
         feedsAdapter = new FeedsAdapter(getContext(), new ArrayList<FeedItem>(), onItemClickListener);
         recyclerView.setAdapter(feedsAdapter);
-
-
-       // address = "http://www.sciencemag.org/rss/news_current.xml";
-        address = "https://news.tut.by/rss/all.rss";
-        RssReader rssReader = new RssReader(getContext(), address);
+        rssReader = new RssReader(getContext(), address);
         rssReader.addOnFeedItemLoadedListener(this);
-
-
-        rssReader.addOnExecutedListener(new RssReader.OnItemsLoadedListener() {
-            @Override
-            public void onItemsLoaded() {
-                Toast.makeText(getContext(), "Feed loaded", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onItemsLoadFailed(Exception e) {
-                Toast.makeText(getContext(), "Error occured", Toast.LENGTH_LONG).show();
-            }
-        });
-
+        rssReader.addOnExecutedListener(this);
         rssReader.execute();
     }
 
+    private void askToInputNewUrl(String title) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder
+                .setCancelable(false)
+                .setMessage(R.string.rss_correct_url_request)
+                .setTitle(title)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                showRssSourceInputDialog();
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+        builder.create().show();
 
+    }
+
+    private void showRssSourceInputDialog() {
+        LayoutInflater li = LayoutInflater.from(getContext());
+        View dialogView = li.inflate(R.layout.rss_source_input_dialog, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(
+                getContext());
+
+        builder.setView(dialogView);
+
+        final EditText sourceInput = (EditText) dialogView
+                .findViewById(R.id.rssSourseInputDialog__editText);
+
+        builder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                readRss(sourceInput.getText().toString());
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -137,7 +194,41 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
 
     @Override
     public void onFeedItemLoadFailed(Exception e) {
-        Toast.makeText(getContext(), "Error occured when loading item", Toast.LENGTH_SHORT).show();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), "Error occured when loading item", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onItemsLoaded() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), "Feed loaded", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public void onItemsLoadFailed(Exception e) {
+        if (e instanceof MalformedURLException) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    askToInputNewUrl("Incorrect RssFeed link");
+                }
+            });
+        } else {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), "Loading failed", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public interface OnFragmentInteractionListener {
@@ -148,7 +239,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
+        inflater.inflate(R.menu.news_fragment__menu, menu);
     }
 
     @Override

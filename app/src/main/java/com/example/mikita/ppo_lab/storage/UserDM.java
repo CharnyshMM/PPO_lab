@@ -38,11 +38,21 @@ public class UserDM {
         Email = email;
     }
 
+//    public String getRssFeedLink() {
+//        return RssFeedLink;
+//    }
+//
+//    public void setRssFeedLink(String rssFeedLink) {
+//        RssFeedLink = rssFeedLink;
+//    }
+
+
     private int ID;
     private String Name;
     private String Surname;
     private String Email;
     private String Phone;
+    //private String RssFeedLink;
 
     public UserDM() {}
 

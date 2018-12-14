@@ -15,4 +15,5 @@
     <string name="title_activity_rss_web_view">RssWebView</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="rss_correct_url_request">You need to specify CORRECT link to rss feed</string>
 </resources>

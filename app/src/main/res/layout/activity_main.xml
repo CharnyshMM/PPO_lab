@@ -15,14 +15,14 @@
         android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
-        <ProgressBar
-            android:id="@+id/main__topProgressBar"
-            style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
-            android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_alignBottom="@id/toolbar"
-            />
+        <!--<ProgressBar-->
+            <!--android:id="@+id/main__topProgressBar"-->
+            <!--style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="5dp"-->
+            <!---->
+            <!--/>-->
         <fragment
             android:id="@+id/my_nav_hos_f"
             android:name="androidx.navigation.fragment.NavHostFragment"

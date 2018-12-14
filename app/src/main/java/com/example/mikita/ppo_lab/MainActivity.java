@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
     private BottomNavigationView navigationView;
     private FirebaseUser firebaseUser;
 
-    private ProgressBar progressBar;
+    //private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
-        progressBar = findViewById(R.id.main__topProgressBar);
+        //progressBar = findViewById(R.id.main__topProgressBar);
         navController = Navigation.findNavController(this, R.id.my_nav_hos_f);
         navigationView = (BottomNavigationView) findViewById(R.id.main__bottom_navigation_view);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -152,16 +152,16 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
 
     @Override
     public void onProgressStarted() {
-        progressBar.setVisibility(View.VISIBLE);
-        progressBar.bringToFront();
-        progressBar.setIndeterminate(true);
-        progressBar.animate();
-
+//        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.bringToFront();
+//        progressBar.setIndeterminate(true);
+//        progressBar.animate();
+        Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onProgressEnded() {
-        progressBar.setVisibility(View.GONE);
+//        progressBar.setVisibility(View.GONE);
         Toast.makeText(this, "Loading finished", Toast.LENGTH_SHORT).show();
     }
 }

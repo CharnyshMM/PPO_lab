@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mikita.ppo_lab.storage.AvatarRepository;
+import com.example.mikita.ppo_lab.storage.UserDM;
+import com.example.mikita.ppo_lab.storage.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -24,14 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import java.io.File;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -50,15 +45,10 @@ public class ProfileFragment extends Fragment {
     private TextView surnameTextView;
     private ImageView avatarView;
 
-    private DatabaseReference mDatabase;
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
-    private UserDM userDM;
-
     private AvatarRepository.OnAvatarDownloadedListener onAvatarDownloadedListener;
     private UserRepository.OnUserDMUpdatedListener onUserDMUpdatedListener;
 
-    private OnFragmentInteractionListener mListener;
+    //private OnProgressListener mListener;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -145,22 +135,17 @@ public class ProfileFragment extends Fragment {
         phoneTextView.setText(user.getPhone());
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+//        if (context instanceof OnProgressListener) {
+//            mListener = (OnProgressListener) context;
+//        }
+//        else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnProgressListener");
+//        }
     }
 
     private void setFileAsAvatar(File file) {
@@ -173,23 +158,16 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        //mListener = null;
         AvatarRepository.getInstance().removeOnAvatarDownloadedListener(onAvatarDownloadedListener);
         UserRepository.getInstance().removeOnUserDMUpdatedListener(onUserDMUpdatedListener);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
+//    public interface OnProgressListener {
+//        // TODO: Update argument type and name
+//        void onProgressStarted();
+//        void onProgressFinished();
+//    }
+
 }

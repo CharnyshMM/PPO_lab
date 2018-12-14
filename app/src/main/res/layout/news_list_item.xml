@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/cardview"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="2dp"
+    android:layout_margin="5dp">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+        <ImageView
+            android:id="@+id/thumb_img"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/date_text"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:ellipsize="end"
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/thumb_img"
+            android:layout_centerHorizontal="true"
+            android:background="#80000000"
+            android:padding="8dp"
+            android:gravity="center"
+            android:lines="1"
+            android:textAppearance="?android:attr/textAppearanceLargeInverse"/>
+
+        <TextView
+            android:ellipsize="end"
+            android:id="@+id/description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="14dp"
+            android:layout_below="@+id/thumb_img"
+            android:layout_alignRight="@+id/date_text"
+            android:layout_alignEnd="@+id/date_text" />
+    </RelativeLayout>
+    <!--</androidx.cardview.widget.CardView>-->
+</androidx.cardview.widget.CardView>

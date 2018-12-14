@@ -1,9 +1,7 @@
-package com.example.mikita.ppo_lab;
+package com.example.mikita.ppo_lab.storage;
 
-import android.app.AuthenticationRequiredException;
 import android.net.Uri;
 
-import com.firebase.ui.auth.data.model.User;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,12 +35,13 @@ public class AvatarRepository {
 
     private ArrayList<OnAvatarUploadedListener> onAvatarUploadedListeners;
     private ArrayList<OnAvatarDownloadedListener> onAvatarDownloadedListeners;
-
+    private ArrayList<OnProgressListener> progressListeners;
 
     private AvatarRepository(){
         storageRef = FirebaseStorage.getInstance().getReference();
         onAvatarDownloadedListeners = new ArrayList<>();
         onAvatarUploadedListeners = new ArrayList<>();
+        progressListeners = new ArrayList<>();
         avatarFile = null;
         downloadUrl = null;
     }
@@ -64,10 +63,11 @@ public class AvatarRepository {
         }
         String uid = user.getUid();
         final StorageReference fileRef = storageRef.child(uid+"/"+avatarFilename+avatarFileExtention);
-
+        notifyOnProgressListeners(true);
         fileRef.putFile(file).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                notifyOnProgressListeners(false);
                 if (!task.isSuccessful()) {
                     throw task.getException();
                 }
@@ -102,7 +102,7 @@ public class AvatarRepository {
         final StorageReference fileRef = storageRef.child( uid+"/"+avatarFilename+avatarFileExtention);
         try {
             final File localFile = File.createTempFile(avatarFilename, "jpg");
-
+            notifyOnProgressListeners(true);
             fileRef.getFile(localFile)
                     .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                         @Override
@@ -110,12 +110,14 @@ public class AvatarRepository {
                             // Successfully downloaded data to local file
                             avatarFile = localFile;
                             notifyOnAvatarDownloadedListenersAboutSuccess(avatarFile);
+                            notifyOnProgressListeners(false);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
                     // Handle failed download
                     notifyOnAvatarDownloadedListenersAboutFailure(exception);
+                    notifyOnProgressListeners(false);
                 }
             });
         } catch (IOException e) {
@@ -164,6 +166,26 @@ public class AvatarRepository {
     public void notifyOnAvatarDownloadedListenersAboutFailure(Exception e) {
         for (OnAvatarDownloadedListener listener:onAvatarDownloadedListeners) {
             listener.onAvatarDownloadFailure(e);
+        }
+    }
+
+    public void addOnProgressListener(OnProgressListener listener) {
+        if (!progressListeners.contains(listener)) {
+            progressListeners.add(listener);
+        }
+    }
+
+    public void removeOnProgressListener(OnProgressListener listener) {
+        progressListeners.remove(listener);
+    }
+
+    protected void notifyOnProgressListeners(boolean start) {
+        for (OnProgressListener listener:progressListeners) {
+            if (start) {
+                listener.onProgressStarted();
+            } else {
+                listener.onProgressEnded();
+            }
         }
     }
 

@@ -11,4 +11,8 @@
     <string name="default_email">usermail@example.by</string>
     <string name="button_save">Save</string>
     <string name="button_edit">Edit</string>
+
+    <string name="title_activity_rss_web_view">RssWebView</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.mikita.ppo_lab;
+package com.example.mikita.ppo_lab.storage;
 
 import android.util.Log;
 
@@ -24,14 +24,19 @@ public class UserRepository implements ValueEventListener {
     private UserDM user;
 
     private ArrayList<OnUserDMUpdatedListener> userDMUpdatedListeners;
+    private ArrayList<OnProgressListener> progressListeners;
 
     private UserRepository() {
         firebaseAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        db.setPersistenceEnabled(true);
+        databaseReference = db.getReference();
+
         firebaseUser = firebaseAuth.getCurrentUser();
         user = null;
         databaseReference.child("users").child(firebaseUser.getUid()).addValueEventListener(this);
         userDMUpdatedListeners = new ArrayList<OnUserDMUpdatedListener>();
+        progressListeners = new ArrayList<>();
     }
 
     public static UserRepository getInstance() {
@@ -82,5 +87,15 @@ public class UserRepository implements ValueEventListener {
 
     public void removeOnUserDMUpdatedListener(OnUserDMUpdatedListener listener) {
         userDMUpdatedListeners.remove(listener);
+    }
+
+    public void addOnProgressListener(OnProgressListener listener) {
+        if (!progressListeners.contains(listener)) {
+            progressListeners.add(listener);
+        }
+    }
+
+    public void removeOnProgressListener(OnProgressListener listener) {
+        progressListeners.remove(listener);
     }
 }

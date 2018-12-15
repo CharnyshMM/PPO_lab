@@ -1,11 +1,13 @@
 package com.example.mikita.ppo_lab;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
     private BottomNavigationView navigationView;
     private FirebaseUser firebaseUser;
 
-    //private ProgressBar progressBar;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
 
-        //progressBar = findViewById(R.id.main__topProgressBar);
         navController = Navigation.findNavController(this, R.id.my_nav_hos_f);
         navigationView = (BottomNavigationView) findViewById(R.id.main__bottom_navigation_view);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -72,7 +73,9 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
         if (firebaseUser != null) {
             NavOptions.Builder navBuilder = new NavOptions.Builder();
             NavOptions navOptions = navBuilder.setClearTask(true).build();
-            navController.navigate(R.id.profileFragment, null, navOptions);
+            if(navController.getCurrentDestination().getId() == R.id.loginFragment) {
+                navController.navigate(R.id.profileFragment, null, navOptions);
+            }
         } else {
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), RC_SIGN_IN);
         }
@@ -100,11 +103,18 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
+
             // Successfully signed in
             if (resultCode == RESULT_OK) {
                 NavOptions.Builder navBuilder = new NavOptions.Builder();
                 NavOptions navOptions = navBuilder.setClearTask(true).build();
-                navController.navigate(R.id.profileFragment, null, navOptions);
+                if (response.isNewUser()) {
+                    navController.navigate(R.id.editProfileFragment, null, navOptions );
+                } else {
+                    if(navController.getCurrentDestination().getId() == R.id.loginFragment) {
+                        navController.navigate(R.id.profileFragment, null, navOptions);
+                    }
+                }
                 navigationView.setVisibility(View.VISIBLE);
             } else {
 
@@ -152,17 +162,12 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
 
     @Override
     public void onProgressStarted() {
-//        progressBar.setVisibility(View.VISIBLE);
-//        progressBar.bringToFront();
-//        progressBar.setIndeterminate(true);
-//        progressBar.animate();
-        Toast.makeText(this, "Loading...", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onProgressEnded() {
-//        progressBar.setVisibility(View.GONE);
-        Toast.makeText(this, "Loading finished", Toast.LENGTH_SHORT).show();
+
     }
 }
 

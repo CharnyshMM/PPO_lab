@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -101,6 +102,16 @@ public class EditProfileFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("name", nameEditText.getText().toString());
+        outState.putString("surname", surnameEditText.getText().toString());
+        outState.putString("email", emailEditText.getText().toString());
+        outState.putString("phone", phoneEditText.getText().toString());
+        outState.putString("selectedAvatarUri", selectedAvatarUri == null? null : selectedAvatarUri.toString());
+    }
+
+    @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -111,10 +122,35 @@ public class EditProfileFragment extends Fragment {
         phoneEditText = (EditText) view.findViewById(R.id.editProfile__phone_textView);
         avatarView = (ImageView) view.findViewById(R.id.editProfile__avatarView);
 
+        userDM = UserRepository.getInstance().getUser();
+        if (userDM == null) {
+            userDM = new UserDM();
+        }
+
         selectedAvatarUri = null;
 
-        setFileAsAvatar(AvatarRepository.getInstance().getAvatarFile());
+        if (savedInstanceState == null) {
+            nameEditText.setText(userDM.getName());
+            surnameEditText.setText(userDM.getSurname());
+            emailEditText.setText(userDM.getEmail());
+            phoneEditText.setText(userDM.getPhone());
 
+            setFileAsAvatar(AvatarRepository.getInstance().getAvatarFile());
+        } else {
+            nameEditText.setText(savedInstanceState.getString("name"));
+            surnameEditText.setText(savedInstanceState.getString("surname"));
+            emailEditText.setText(savedInstanceState.getString("email"));
+            phoneEditText.setText(savedInstanceState.getString("phone"));
+            String avatarUri = savedInstanceState.getString("selectedAvatarUri");
+            if (avatarUri != null) {
+                selectedAvatarUri = Uri.parse(avatarUri);
+            }
+        }
+        if (selectedAvatarUri != null) {
+            avatarView.setImageURI(selectedAvatarUri);
+        } else {
+            setFileAsAvatar(AvatarRepository.getInstance().getAvatarFile());
+        }
         onAvatarDownloadedListener = new AvatarRepository.OnAvatarDownloadedListener() {
             @Override
             public void onAvatarDownloaded(File avatar) {
@@ -128,12 +164,7 @@ public class EditProfileFragment extends Fragment {
         };
         AvatarRepository.getInstance().addOnAvatarDownloadedListener(onAvatarDownloadedListener);
 
-        userDM = UserRepository.getInstance().getUser();
 
-        nameEditText.setText(userDM.getName());
-        surnameEditText.setText(userDM.getSurname());
-        emailEditText.setText(userDM.getEmail());
-        phoneEditText.setText(userDM.getPhone());
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +193,7 @@ public class EditProfileFragment extends Fragment {
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), RC_PICK_IMAGE_REQUEST);
             }
         });
-    }
+     }
 
     private void setFileAsAvatar(File file) {
         if (file == null)
@@ -206,16 +237,6 @@ public class EditProfileFragment extends Fragment {
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnAvatarImageClickListener {
         void onAvatarImageClick();
     }

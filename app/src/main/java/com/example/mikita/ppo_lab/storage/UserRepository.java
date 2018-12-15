@@ -33,7 +33,7 @@ public class UserRepository implements ValueEventListener {
         databaseReference = db.getReference();
 
         firebaseUser = firebaseAuth.getCurrentUser();
-        user = null;
+        user = new UserDM();
         databaseReference.child("users").child(firebaseUser.getUid()).addValueEventListener(this);
         userDMUpdatedListeners = new ArrayList<OnUserDMUpdatedListener>();
         progressListeners = new ArrayList<>();
@@ -66,7 +66,7 @@ public class UserRepository implements ValueEventListener {
 
     @Override
     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+        databaseError = databaseError;
     }
 
     public interface OnUserDMUpdatedListener {

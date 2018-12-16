@@ -5,6 +5,8 @@ import android.content.Context;
 import android.media.Image;
 import android.os.AsyncTask;
 
+import com.example.mikita.ppo_lab.storage.OnProgressListener;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-public class RssReader extends AsyncTask<Void, Void, Void> {
+public class RssReader extends AsyncTask<Void, Void, Void>  {
 
     protected String address;
     protected ArrayList<FeedItem> feedItems;
@@ -32,22 +34,50 @@ public class RssReader extends AsyncTask<Void, Void, Void> {
         feedItems = new ArrayList<FeedItem>();
         onItemsLoadedListeners = new ArrayList<>();
         onFeedItemLoadedListeners = new ArrayList<>();
+        onProgressListeners = new ArrayList<>();
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        notifyOnProgressStarted();
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        notifyOnProgressEnded();
     }
+
+
 
     public interface OnItemsLoadedListener {
         void onItemsLoaded();
         void onItemsLoadFailed(Exception e);
     }
+    private ArrayList<OnProgressListener> onProgressListeners;
+    public void addOnProgressListener(OnProgressListener listener) {
+        if (!onProgressListeners.contains(listener)) {
+            onProgressListeners.add(listener);
+        }
+    }
+
+    public void removeOnProgressListener(OnProgressListener listener) {
+        onProgressListeners.remove(listener);
+    }
+
+    public void notifyOnProgressStarted() {
+        for (OnProgressListener listener:onProgressListeners) {
+            listener.onProgressStarted();
+        }
+    }
+
+    public void notifyOnProgressEnded() {
+        for (OnProgressListener listener:onProgressListeners) {
+            listener.onProgressEnded();
+        }
+    }
+
 
     private ArrayList<OnItemsLoadedListener> onItemsLoadedListeners;
 
@@ -68,6 +98,7 @@ public class RssReader extends AsyncTask<Void, Void, Void> {
     }
 
     private void notifyOnItemsLoadFailed(Exception e) {
+
         for (OnItemsLoadedListener listener: onItemsLoadedListeners) {
             listener.onItemsLoadFailed(e);
         }
@@ -90,6 +121,7 @@ public class RssReader extends AsyncTask<Void, Void, Void> {
     }
 
     private void notifyOnFeedItemLoaded(FeedItem item) {
+
         for (OnFeedItemLoadedListener listener: onFeedItemLoadedListeners) {
             listener.onFeedItemLoaded(item);
         }

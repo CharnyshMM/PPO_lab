@@ -1,6 +1,7 @@
 package com.example.mikita.ppo_lab;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,12 +30,13 @@ import com.example.mikita.ppo_lab.rss.FeedItem;
 import com.example.mikita.ppo_lab.rss.FeedsAdapter;
 import com.example.mikita.ppo_lab.rss.RssReader;
 import com.example.mikita.ppo_lab.storage.CacheRepository;
+import com.example.mikita.ppo_lab.storage.OnProgressListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
-public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoadedListener, RssReader.OnItemsLoadedListener{
+public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoadedListener, RssReader.OnItemsLoadedListener, OnProgressListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,6 +50,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
     private RecyclerView recyclerView;
     private FeedsAdapter feedsAdapter;
     private RssReader rssReader;
+    private ProgressDialog progressDialog;
     FeedsAdapter.OnItemClickListener onItemClickListener;
 
     public NewsFragment() {
@@ -147,6 +150,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
         rssReader = new RssReader(getContext(), address);
         rssReader.addOnFeedItemLoadedListener(this);
         rssReader.addOnExecutedListener(this);
+        rssReader.addOnProgressListener(this);
         rssReader.execute();
     }
 
@@ -286,6 +290,23 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
                     loadRssFromCache();
                 }
             });
+        }
+    }
+
+    @Override
+    public void onProgressStarted() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getContext());
+        }
+        progressDialog.show();
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+    }
+
+    @Override
+    public void onProgressEnded() {
+        if (progressDialog != null) {
+            progressDialog.hide();
         }
     }
 

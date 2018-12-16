@@ -16,4 +16,7 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="rss_correct_url_request">You need to specify CORRECT link to rss feed</string>
+    <string name="make_photo">Take photo</string>
+    <string name="choose_existing">Choose existing</string>
+    <string name="what_you_wanna_do">What do you want to do?</string>
 </resources>

@@ -33,7 +33,7 @@
                 android:adjustViewBounds="true"
                 android:padding="3dp"
                 android:layout_gravity="center_horizontal"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 android:src="@drawable/default_avatar" />
 
                 <TextView

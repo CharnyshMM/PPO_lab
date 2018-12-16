@@ -30,7 +30,7 @@
                 android:layout_margin="9dp"
                 android:adjustViewBounds="true"
                 android:padding="3dp"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 android:src="@drawable/default_avatar" />
 
             <EditText

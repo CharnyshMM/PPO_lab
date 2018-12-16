@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,8 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements OnProgressListener,
         NewsFragment.OnFragmentInteractionListener, FavoritesFragment.OnFragmentInteractionListener,
-        EditProfileFragment.OnAvatarImageClickListener, AboutFragment.OnFragmentInteractionListener,
-        LoginFragment.OnLoginFragmentSignInClickListener
+        AboutFragment.OnFragmentInteractionListener, LoginFragment.OnLoginFragmentSignInClickListener
 {
 
 
@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
                 navController.navigate(R.id.loginFragment);
 
                 if (response == null) {
-                    // User pressed back button
                     Toast.makeText(this, "shit, why did you pressed back???", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -143,16 +142,6 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
     @Override
     public void onFragmentInteraction(Uri uri) {
 
-    }
-
-    @Override
-    public void onAvatarImageClick() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"),
-                RC_PICK_IMAGE_REQUEST);
     }
 
     @Override

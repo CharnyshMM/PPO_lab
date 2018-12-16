@@ -1,5 +1,6 @@
 package com.example.mikita.ppo_lab.storage;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.Continuation;
@@ -15,6 +16,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,6 +90,45 @@ public class AvatarRepository {
             }
         });
     }
+
+    public void setAvatar(Bitmap bitmap) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user == null) {
+            notifyOnAvatarDownloadedListenersAboutFailure(new FirebaseAuthException("not authorized", "user is not authorized"));
+            return;
+        }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        String uid = user.getUid();
+        final StorageReference fileRef = storageRef.child(uid+"/"+avatarFilename+avatarFileExtention);
+        notifyOnProgressListeners(true);
+        fileRef.putBytes(data).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                notifyOnProgressListeners(false);
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return fileRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    downloadUrl = task.getResult();
+                    downloadAvatar();
+
+                } else {
+                    // Handle failures
+                }
+            }
+        });
+    }
+
     public File getAvatarFile() {
         return avatarFile;
     }

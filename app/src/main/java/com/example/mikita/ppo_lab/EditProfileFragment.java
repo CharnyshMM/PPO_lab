@@ -1,5 +1,6 @@
 package com.example.mikita.ppo_lab;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,18 +26,12 @@ import com.example.mikita.ppo_lab.storage.UserDM;
 import com.example.mikita.ppo_lab.storage.UserRepository;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EditProfileFragment.OnAvatarImageClickListener} interface
- * to handle interaction events.
- * Use the {@link EditProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EditProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,6 +43,7 @@ public class EditProfileFragment extends Fragment {
     private String mParam2;
 
     private static final int RC_PICK_IMAGE_REQUEST = 1234;
+    private static final int RC_TAKE_PHOTO_REQUEST = 4321;
 
     private Button saveButton;
     private EditText emailEditText;
@@ -57,9 +54,10 @@ public class EditProfileFragment extends Fragment {
 
     private UserDM userDM;
 
-    private Uri selectedAvatarUri;
+    private Uri selectedAvatarUri = null;
+    private Bitmap takenAvatarBitmap = null;
 
-    private OnAvatarImageClickListener mListener;
+    //private OnAvatarImageClickListener mListener;
 
     private AvatarRepository.OnAvatarDownloadedListener onAvatarDownloadedListener;
 
@@ -109,6 +107,7 @@ public class EditProfileFragment extends Fragment {
         outState.putString("email", emailEditText.getText().toString());
         outState.putString("phone", phoneEditText.getText().toString());
         outState.putString("selectedAvatarUri", selectedAvatarUri == null? null : selectedAvatarUri.toString());
+        outState.putParcelable("takenAvatarUri", takenAvatarBitmap);
     }
 
     @Override
@@ -135,19 +134,22 @@ public class EditProfileFragment extends Fragment {
             emailEditText.setText(userDM.getEmail());
             phoneEditText.setText(userDM.getPhone());
 
-            setFileAsAvatar(AvatarRepository.getInstance().getAvatarFile());
+//            setFileAsAvatar(AvatarRepository.getInstance().getAvatarFile());
         } else {
             nameEditText.setText(savedInstanceState.getString("name"));
             surnameEditText.setText(savedInstanceState.getString("surname"));
             emailEditText.setText(savedInstanceState.getString("email"));
             phoneEditText.setText(savedInstanceState.getString("phone"));
             String avatarUri = savedInstanceState.getString("selectedAvatarUri");
+            takenAvatarBitmap = savedInstanceState.getParcelable("takenAvatarBitmap");
             if (avatarUri != null) {
                 selectedAvatarUri = Uri.parse(avatarUri);
             }
         }
         if (selectedAvatarUri != null) {
             avatarView.setImageURI(selectedAvatarUri);
+        }else if (takenAvatarBitmap != null) {
+            avatarView.setImageBitmap(takenAvatarBitmap);
         } else {
             setFileAsAvatar(AvatarRepository.getInstance().getAvatarFile());
         }
@@ -178,6 +180,8 @@ public class EditProfileFragment extends Fragment {
 
                 if (selectedAvatarUri != null) {
                     AvatarRepository.getInstance().setAvatar(selectedAvatarUri);
+                } else if (takenAvatarBitmap != null) {
+                    AvatarRepository.getInstance().setAvatar(takenAvatarBitmap);
                 }
 
                 Navigation.findNavController(view).navigate(R.id.profileFragment);
@@ -187,10 +191,7 @@ public class EditProfileFragment extends Fragment {
         avatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), RC_PICK_IMAGE_REQUEST);
+                showAvatarPhotoSourceSelectionDialog();
             }
         });
      }
@@ -202,42 +203,75 @@ public class EditProfileFragment extends Fragment {
         avatarView.setImageBitmap(myBitmap);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onAvatarImageClick();
-        }
+    private void showAvatarPhotoSourceSelectionDialog() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.pick_photo_sourse_selection_dialog);
+        dialog.setTitle("Set avatar photo");
+        Button makePhotoButton = dialog.findViewById(R.id.pickPhotoSourceSelectionDialog_takePhoto_button);
+        makePhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(takePictureIntent, RC_TAKE_PHOTO_REQUEST);
+                dialog.hide();
+            }
+        });
+        Button chooseExistingButton = dialog.findViewById(R.id.pickPhotoSourceSelectionDialog_chooseExisting_button);
+        chooseExistingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), RC_PICK_IMAGE_REQUEST);
+                dialog.hide();
+            }
+        });
+        dialog.show();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnAvatarImageClickListener) {
-            mListener = (OnAvatarImageClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnAvatarImageClickListener) {
+//            mListener = (OnAvatarImageClickListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+//    }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+       // mListener = null;
         AvatarRepository.getInstance().removeOnAvatarDownloadedListener(onAvatarDownloadedListener);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RC_PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            selectedAvatarUri = data.getData();
-            avatarView.setImageURI(selectedAvatarUri);
+        switch (requestCode) {
+            case RC_PICK_IMAGE_REQUEST:
+                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    selectedAvatarUri = data.getData();
+                    avatarView.setImageURI(selectedAvatarUri);
+                    takenAvatarBitmap = null;
+                }
+                break;
+            case RC_TAKE_PHOTO_REQUEST:
+                if (resultCode == RESULT_OK){
+                    Bundle extras = data.getExtras();
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    avatarView.setImageBitmap(imageBitmap);
+                    takenAvatarBitmap = imageBitmap;
+                    selectedAvatarUri = null;
+                }
         }
     }
-
-    public interface OnAvatarImageClickListener {
-        void onAvatarImageClick();
-    }
+//
+//    public interface OnAvatarImageClickListener {
+//        void onAvatarImageClick();
+//    }
 }

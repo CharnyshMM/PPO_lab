@@ -7,8 +7,11 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
 
     private ProgressDialog progressDialog;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,12 +69,25 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
         navController = Navigation.findNavController(this, R.id.my_nav_hos_f);
         navigationView = (BottomNavigationView) findViewById(R.id.main__bottom_navigation_view);
         NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                if (navController.getCurrentDestination().getId() == R.id.editProfileFragment) {
+                    askAndNavigateToFragment(menuItem.getItemId());
+                } else {
+                    navController.navigate(menuItem.getItemId());
+                }
+
+                return false;
+            }
+        });
 
         AvatarRepository.getInstance().addOnProgressListener(this);
 
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
+
         if (firebaseUser != null) {
             NavOptions.Builder navBuilder = new NavOptions.Builder();
             NavOptions navOptions = navBuilder.setClearTask(true).build();
@@ -136,6 +154,31 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
 
                 Log.e(TAG, "Sign-in error: ", response.getError());
             }
+        }
+    }
+
+    private void askAndNavigateToFragment(final int fragmentId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("You're about to loose unsaved changes!")
+                .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        navController.navigate(fragmentId);
+                    }
+                })
+                .setNegativeButton("Stay", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        builder.create().show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (navController.getCurrentDestination().getId() == R.id.editProfileFragment) {
+            askAndNavigateToFragment(R.id.profileFragment);
+        } else {
+            super.onBackPressed();
         }
     }
 

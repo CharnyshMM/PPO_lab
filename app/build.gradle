@@ -106,7 +106,6 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-storage:4.1.0'
 
     implementation 'com.github.bumptech.glide:glide:3.7.0'
-
     implementation 'androidx.cardview:cardview:1.0.0'
 
     implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
@@ -116,5 +115,7 @@ dependencies {
 // Lifecycle components
     implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
+
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 apply plugin: 'com.google.gms.google-services'

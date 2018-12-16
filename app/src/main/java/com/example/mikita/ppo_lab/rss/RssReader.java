@@ -14,6 +14,7 @@ import org.w3c.dom.NodeList;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -146,6 +147,7 @@ public class RssReader extends AsyncTask<Void, Void, Void> {
             url = new URL(address);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
+            connection.setConnectTimeout(1000);
             InputStream inputStream = connection.getInputStream();
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
@@ -156,6 +158,10 @@ public class RssReader extends AsyncTask<Void, Void, Void> {
             notifyOnItemsLoadFailed(e);
             return null;
 
+        } catch (SocketTimeoutException e) {
+            e.printStackTrace();
+            notifyOnItemsLoadFailed(e);
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             notifyOnItemsLoadFailed(e);

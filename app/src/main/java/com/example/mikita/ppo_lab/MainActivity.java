@@ -11,8 +11,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -124,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
 
             // Successfully signed in
             if (resultCode == RESULT_OK) {
+
                 NavOptions.Builder navBuilder = new NavOptions.Builder();
                 NavOptions navOptions = navBuilder.setClearTask(true).build();
                 if (response.isNewUser()) {

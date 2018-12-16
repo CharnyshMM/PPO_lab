@@ -1,5 +1,8 @@
 package com.example.mikita.ppo_lab.rss;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class FeedItem {
     public String getTitle() {
         return title;
@@ -41,9 +44,23 @@ public class FeedItem {
         this.thumbnailUrl = thumbnailUrl;
     }
 
+    @SerializedName("title")
+    @Expose
     protected String title = null;
+
+    @SerializedName("link")
+    @Expose
     protected String link = null;
+
+    @SerializedName("description")
+    @Expose
     protected String description = null;
+
+    @SerializedName("pubDate")
+    @Expose
     protected String pubDate = null;
+
+    @SerializedName("thumbnailUrl")
+    @Expose
     protected String thumbnailUrl = null;
 }

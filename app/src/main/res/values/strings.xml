@@ -19,4 +19,6 @@
     <string name="make_photo">Take photo</string>
     <string name="choose_existing">Choose existing</string>
     <string name="what_you_wanna_do">What do you want to do?</string>
+    <string name="preference_last_userId">last_userId</string>
+    <string name="preference_rssUrl"></string>
 </resources>

@@ -16,6 +16,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder> {
+    public ArrayList<FeedItem> getFeedItems() {
+        return feedItems;
+    }
+
+    public void setFeedItems(ArrayList<FeedItem> feedItems) {
+        this.feedItems = feedItems;
+        this.notifyDataSetChanged();
+    }
+
     protected ArrayList<FeedItem> feedItems;
     protected Context context;
     private OnItemClickListener onItemClickListener;

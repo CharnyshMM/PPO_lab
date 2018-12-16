@@ -1,5 +1,6 @@
 package com.example.mikita.ppo_lab;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,8 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mikita.ppo_lab.storage.AvatarRepository;
+import com.example.mikita.ppo_lab.storage.OnProgressListener;
 import com.example.mikita.ppo_lab.storage.UserDM;
 import com.example.mikita.ppo_lab.storage.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,16 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.io.File;
 
 
-public class ProfileFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private static final String TAG = "ProfileFragment";
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class ProfileFragment extends Fragment implements OnProgressListener {
 
     private Button editButton;
     private TextView emailTextView;
@@ -44,6 +38,7 @@ public class ProfileFragment extends Fragment {
     private TextView nameTextView;
     private TextView surnameTextView;
     private ImageView avatarView;
+    private ProgressDialog progressDialog;
 
     private AvatarRepository.OnAvatarDownloadedListener onAvatarDownloadedListener;
     private UserRepository.OnUserDMUpdatedListener onUserDMUpdatedListener;
@@ -54,31 +49,9 @@ public class ProfileFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -119,9 +92,10 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onAvatarDownloadFailure(Exception e) {
-                e = e;
+                Toast.makeText(getContext(), "Error downloading avatar", Toast.LENGTH_SHORT).show();
             }
         };
+        AvatarRepository.getInstance().addOnProgressListener(this);
         AvatarRepository.getInstance().addOnAvatarDownloadedListener(onAvatarDownloadedListener);
     }
 
@@ -164,10 +138,21 @@ public class ProfileFragment extends Fragment {
     }
 
 
-//    public interface OnProgressListener {
-//        // TODO: Update argument type and name
-//        void onProgressStarted();
-//        void onProgressFinished();
-//    }
+    @Override
+    public void onProgressStarted() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getContext());
+        }
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    @Override
+    public void onProgressEnded() {
+        if (progressDialog != null) {
+            progressDialog.hide();
+        }
+    }
 
 }

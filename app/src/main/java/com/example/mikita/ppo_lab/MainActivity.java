@@ -40,9 +40,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity implements OnProgressListener,
-        NewsFragment.OnFragmentInteractionListener, FavoritesFragment.OnFragmentInteractionListener,
-        AboutFragment.OnFragmentInteractionListener, LoginFragment.OnLoginFragmentSignInClickListener
+public class MainActivity extends AppCompatActivity
+        implements LoginFragment.OnLoginFragmentSignInClickListener
 {
 
 
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
             }
         });
 
-        AvatarRepository.getInstance().addOnProgressListener(this);
+        //AvatarRepository.getInstance().addOnProgressListener(this);
 
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
@@ -186,23 +185,10 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
     public void onLoginFragmentSignInClick() {
         startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().build(), RC_SIGN_IN);
     }
 
-    @Override
-    public void onProgressStarted() {
 
-    }
-
-    @Override
-    public void onProgressEnded() {
-
-    }
 }
 

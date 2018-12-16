@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:id="@+id/cardview"
-    app:cardElevation="2dp"
-    app:cardCornerRadius="2dp"
-    android:layout_margin="5dp">
+    android:layout_marginLeft="1dp"
+    android:layout_marginTop="1dp"
+    android:layout_marginRight="1dp"
+    android:minHeight="200dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -21,25 +21,27 @@
             android:layout_alignParentTop="true"
             android:textAppearance="?android:attr/textAppearanceSmall"/>
 
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date_text"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:text="Травка зенелеет, со в сени к нам летить"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
+
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
         <ImageView
             android:id="@+id/thumb_img"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@+id/date_text"
-            android:layout_centerHorizontal="true" />
-
-        <TextView
-            android:ellipsize="end"
-            android:id="@+id/title_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/thumb_img"
-            android:layout_centerHorizontal="true"
-            android:background="#80000000"
-            android:padding="8dp"
-            android:gravity="center"
-            android:lines="1"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse"/>
+            android:layout_below="@id/title_text"
+            app:srcCompat="@drawable/fui_idp_button_background_twitter" />
 
         <TextView
             android:ellipsize="end"
@@ -50,8 +52,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_marginTop="14dp"
             android:layout_below="@+id/thumb_img"
-            android:layout_alignRight="@+id/date_text"
             android:layout_alignEnd="@+id/date_text" />
+
     </RelativeLayout>
     <!--</androidx.cardview.widget.CardView>-->
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

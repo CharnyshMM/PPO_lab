@@ -83,8 +83,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        //AvatarRepository.getInstance().addOnProgressListener(this);
-
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
         firebaseUser = mAuth.getCurrentUser();
@@ -111,8 +109,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_bar_menu__action_about:
-                  navController.navigate(R.id.aboutFragment);
-                  return true;
+                if (navController.getCurrentDestination().getId() == R.id.editProfileFragment) {
+                    askAndNavigateToFragment(R.id.aboutFragment);
+                } else {
+                    navController.navigate(R.id.aboutFragment);
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -142,16 +144,16 @@ public class MainActivity extends AppCompatActivity
                 navController.navigate(R.id.loginFragment);
 
                 if (response == null) {
-                    Toast.makeText(this, "shit, why did you pressed back???", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.why_did_you_pressed_back, Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
-                    Toast.makeText(this, "shit, NO NETWORK ERROR.", Toast.LENGTH_LONG);
+                    Toast.makeText(this, R.string.no_internet, Toast.LENGTH_LONG);
                     return;
                 }
 
-                Toast.makeText(this, "unknown error", Toast.LENGTH_LONG);
+                Toast.makeText(this, R.string.unknown_error, Toast.LENGTH_LONG);
 
 
                 Log.e(TAG, "Sign-in error: ", response.getError());
@@ -161,13 +163,13 @@ public class MainActivity extends AppCompatActivity
 
     private void askAndNavigateToFragment(final int fragmentId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You're about to loose unsaved changes!")
-                .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.youre_about_to_loose_changes)
+                .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         navController.navigate(fragmentId);
                     }
                 })
-                .setNegativeButton("Stay", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.stay, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                     }

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -70,7 +71,10 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.news__recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        int orientation = getContext().getResources().getConfiguration().orientation;
+
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), orientation));
+
         onItemClickListener = new FeedsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(FeedItem item) {
@@ -79,7 +83,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
                     intent.putExtra("URL", item.getLink());
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getContext(), R.string.no_internet, Toast.LENGTH_LONG);
+                    Toast.makeText(getContext(), R.string.no_internet, Toast.LENGTH_LONG).show();
                 }
             }
         };
@@ -87,10 +91,10 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
         String lastUserId = sharedPref.getString(getString(R.string.preference_last_userId), null);
         String rssUrl = sharedPref.getString(getString(R.string.preference_rssUrl), null);
         if (lastUserId == null){
-            askToInputNewUrl("Welcome to RSS World!");
+            askToInputNewUrl(getString(R.string.welcome_to_rss));
         } else if (!lastUserId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             CacheRepository.getInstance().removeCacheForUser(getContext(), lastUserId);
-            askToInputNewUrl("Welcome to RSS World!");
+            askToInputNewUrl(getString(R.string.welcome_to_rss));
         } else {
             doRss(rssUrl);
         }
@@ -137,7 +141,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
         ArrayList<FeedItem> items = CacheRepository.getInstance().readRssCache(getContext(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid());
         feedsAdapter.setFeedItems(items);
-        Toast.makeText(getContext(), "Loaded from cache", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.feed_loaded_from_cache, Toast.LENGTH_SHORT).show();
     }
 
     private void askToInputNewUrl(String title) {
@@ -177,7 +181,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
 
         builder
                 .setCancelable(false)
-                .setPositiveButton("OK",
+                .setPositiveButton(R.string.ok,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 String url = sourceInput.getText().toString();
@@ -185,7 +189,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
                                 doRss(url);
                             }
                         })
-                .setNegativeButton("Cancel",
+                .setNegativeButton(R.string.cancel,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 dialog.cancel();
@@ -212,7 +216,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getContext(), "Error occured when loading item", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.feed_item_loading_failed, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -237,7 +241,7 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getContext(), "Feed loaded", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.feed_loaded, Toast.LENGTH_LONG).show();
                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 setLastUserUidPreference(uid);
                 CacheRepository.getInstance().writeRssToCache(getContext(), feedsAdapter.getFeedItems(), uid);
@@ -252,14 +256,14 @@ public class NewsFragment extends Fragment implements RssReader.OnFeedItemLoaded
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    askToInputNewUrl("Incorrect RssFeed link");
+                    askToInputNewUrl(getString(R.string.incorrect_rss_url));
                 }
             });
         } else {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getContext(), "Loading failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.loading_failed), Toast.LENGTH_LONG).show();
                     loadRssFromCache();
                 }
             });

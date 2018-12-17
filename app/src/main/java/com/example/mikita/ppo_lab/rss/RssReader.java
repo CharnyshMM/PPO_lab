@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.media.Image;
 import android.os.AsyncTask;
+import android.service.autofill.FieldClassification;
 
 import com.example.mikita.ppo_lab.storage.OnProgressListener;
 
@@ -19,6 +20,8 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -164,7 +167,13 @@ public class RssReader extends AsyncTask<Void, Void, Void>  {
                         String url = node.getAttributes().item(0).getTextContent();
                         feedItem.setThumbnailUrl(url);
                     }else if (node.getNodeName().equalsIgnoreCase("description")) {
-                        feedItem.setDescription(node.getTextContent());
+                        String content = node.getTextContent();
+                        Pattern pattern = Pattern.compile("img\\s*src=(\\\".*?\\\")");
+                        Matcher matcher = pattern.matcher(content);
+                        if (matcher.matches()) {
+                            String str = matcher.toMatchResult().group();
+                        }
+                        feedItem.setDescription(content);
                     }
                 }
                 feedItems.add(feedItem);

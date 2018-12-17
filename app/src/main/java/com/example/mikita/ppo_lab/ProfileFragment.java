@@ -113,13 +113,6 @@ public class ProfileFragment extends Fragment implements OnProgressListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnProgressListener) {
-//            mListener = (OnProgressListener) context;
-//        }
-//        else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnProgressListener");
-//        }
     }
 
     private void setFileAsAvatar(File file) {
@@ -135,13 +128,14 @@ public class ProfileFragment extends Fragment implements OnProgressListener {
         //mListener = null;
         AvatarRepository.getInstance().removeOnAvatarDownloadedListener(onAvatarDownloadedListener);
         UserRepository.getInstance().removeOnUserDMUpdatedListener(onUserDMUpdatedListener);
+        AvatarRepository.getInstance().removeOnProgressListener(this);
     }
 
 
     @Override
     public void onProgressStarted() {
         if (progressDialog == null) {
-            progressDialog = new ProgressDialog(getContext());
+            progressDialog = new ProgressDialog(getActivity());
         }
         progressDialog.setMessage(getString(R.string.loading));
         progressDialog.setCancelable(false);

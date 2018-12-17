@@ -9,7 +9,7 @@
         android:id="@+id/newsFragment"
         android:name="com.example.mikita.ppo_lab.NewsFragment"
         android:label="fragment_news"
-        tools:layout="@layout/fragment_news" ></fragment>
+        tools:layout="@layout/fragment_news" ><deepLink app:uri="app://myapp/page1" android:autoVerify="true"/></fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.mikita.ppo_lab.ProfileFragment"
@@ -23,13 +23,13 @@
             app:destination="@id/editProfileFragment" />
         <action
             android:id="@+id/action_profileFragment_to_newsFragment"
-            app:destination="@id/newsFragment" />
+            app:destination="@id/newsFragment" /><deepLink app:uri="app://myapp/page2" android:autoVerify="true"/>
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.mikita.ppo_lab.FavoritesFragment"
         android:label="fragment_favorites"
-        tools:layout="@layout/fragment_favorites" ></fragment>
+        tools:layout="@layout/fragment_favorites" ><deepLink app:uri="2"/></fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.mikita.ppo_lab.EditProfileFragment"
@@ -53,20 +53,4 @@
             android:id="@+id/action_loginFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
-
-    <!--<fragment-->
-        <!--android:id="@+id/news_fragment"-->
-        <!--android:name="com.example.mikita.ppo_lab.NewsFragment"-->
-        <!--android:label="NewsFragment" />-->
-
-    <!--<fragment-->
-        <!--android:id="@+id/profile_fragment"-->
-        <!--android:name="com.example.mikita.ppo_lab.ProfileFragment"-->
-        <!--android:label="ProfileFragment" />-->
-
-    <!--<fragment-->
-        <!--android:id="@+id/favorites_fragment"-->
-        <!--android:name="com.example.mikita.ppo_lab.FavoritesFragment"-->
-        <!--android:label="FavoritesFragment" />-->
-
 </navigation>

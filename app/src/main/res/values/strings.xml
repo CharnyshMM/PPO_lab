@@ -20,7 +20,31 @@
     <string name="choose_existing">Choose existing</string>
     <string name="what_you_wanna_do">What do you want to do?</string>
     <string name="preference_last_userId">last_userId</string>
-    <string name="preference_rssUrl"></string>
+    <string name="preference_rssUrl">rssUrl</string>
     <string name="loading">Loading...</string>
     <string name="no_internet">No Internet connection</string>
+    <string name="set_avatar_photo">Set avatar photo</string>
+    <string name="select_picture">Select Picture</string>
+    <string name="why_did_you_pressed_back">Shit, why did you pressed back?</string>
+    <string name="unknown_error">unknown error</string>
+    <string name="youre_about_to_loose_changes">You\'re about to loose unsaved changes!</string>
+    <string name="leave">Leave</string>
+    <string name="stay">Stay</string>
+    <string name="incorrect_rss_url">Incorrect RssFeed link</string>
+    <string name="loading_failed">Loading failed</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="feed_loaded">Feed loaded</string>
+    <string name="feed_loading_failed">Feed loading failed</string>
+    <string name="feed_item_loading_failed">Feed item loading failed</string>
+    <string name="feed_loaded_from_cache">Feed loaded from cache</string>
+    <string name="welcome_to_rss">Welcome to RSS World!</string>
+    <string name="pphone">Phone</string>
+    <string name="email">E-mail</string>
+    <string name="profile_name">Profile</string>
+    <string name="news_name">News</string>
+    <string name="favorites_name">Favorites</string>
+    <string name="about_name">Info</string>
+    <string name="permission_description">The app needs a permission to access your phone functions,
+        because the app has to show you your device IMEI</string>
 </resources>

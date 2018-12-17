@@ -61,7 +61,7 @@ public class AboutFragment extends Fragment {
 
     private void getPhoneImei()
     {
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_PHONE_STATE)
+        if (getContext().checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.READ_PHONE_STATE)) {
@@ -81,8 +81,7 @@ public class AboutFragment extends Fragment {
 
                 dialogBuilder.show();
             } else {
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
                         REQUEST_READ_PHONE_STATE_PERMISSION);
             }
 

@@ -80,7 +80,7 @@ public class EditProfileFragment extends Fragment {
         outState.putString("email", emailEditText.getText().toString());
         outState.putString("phone", phoneEditText.getText().toString());
         outState.putString("selectedAvatarUri", selectedAvatarUri == null? null : selectedAvatarUri.toString());
-        outState.putParcelable("takenAvatarUri", takenAvatarBitmap);
+        outState.putParcelable("takenAvatarBitmap", takenAvatarBitmap);
     }
 
     @Override
@@ -179,7 +179,7 @@ public class EditProfileFragment extends Fragment {
     private void showAvatarPhotoSourceSelectionDialog() {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.pick_photo_sourse_selection_dialog);
-        dialog.setTitle("Set avatar photo");
+        dialog.setTitle(R.string.set_avatar_photo);
         Button makePhotoButton = dialog.findViewById(R.id.pickPhotoSourceSelectionDialog_takePhoto_button);
         makePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +196,7 @@ public class EditProfileFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), RC_PICK_IMAGE_REQUEST);
+                startActivityForResult(Intent.createChooser(intent, getString(R.string.select_picture)), RC_PICK_IMAGE_REQUEST);
                 dialog.hide();
             }
         });

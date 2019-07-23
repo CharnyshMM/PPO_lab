@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:minHeight="200dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date_text"
+            android:layout_centerHorizontal="true"
+            android:ellipsize="end"
+            android:text="Травка зенелеет, со в сени к нам летить"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
+
+            android:textAlignment="viewStart"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+
+        <ImageView
+            android:id="@+id/thumb_img"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/title_text"
+            app:srcCompat="@drawable/fui_idp_button_background_twitter" />
+
+        <TextView
+            android:ellipsize="end"
+            android:id="@+id/description_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_marginTop="14dp"
+            android:layout_below="@+id/thumb_img"
+            android:layout_alignEnd="@+id/date_text" />
+
+    </RelativeLayout>
+    <!--</androidx.cardview.widget.CardView>-->
+</com.google.android.material.card.MaterialCardView>

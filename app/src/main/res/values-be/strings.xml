@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PPO_lab</string>
+    <string name="Version">Версія</string>
+    <string name="IMEI">IMEI</string>
+    <string name="button_sigin">Увайсці</string>
+    <string name="please_sign_in">Калі ласка, аўтарызуйцеся</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="DEFAULT_NAME">Карыстальнік</string>
+    <string name="default_phone">+3751234567890</string>
+    <string name="default_email">usermail@example.by</string>
+    <string name="button_save">Захаваць</string>
+    <string name="button_edit">Змяніць</string>
+    <string name="title_activity_rss_web_view">RssWebView</string>
+    <string name="rss_correct_url_request">Трэба ўвесці ПРАВІЛЬНУЮ спасылку на RSS</string>
+    <string name="make_photo">Сфатаграфаваць</string>
+    <string name="choose_existing">З існуючых</string>
+    <string name="what_you_wanna_do">Што вы жадаеце зрабіць?</string>
+    <string name="preference_last_userId">last_userId</string>
+    <string name="preference_rssUrl">rssUrl</string>
+    <string name="loading">Пачакайце, калі ласка</string>
+    <string name="no_internet">Няма інтэрнету</string>
+    <string name="set_avatar_photo">Выбраць фота на аватар</string>
+    <string name="select_picture">Выберыце карцінку</string>
+    <string name="why_did_you_pressed_back">Ну чаму вы націснулі назад?</string>
+    <string name="unknown_error">Невядомая памылка</string>
+    <string name="youre_about_to_loose_changes">Вы можаце згубіць тое, што не захавалі!</string>
+    <string name="leave">Працягнуць</string>
+    <string name="stay">Застацца</string>
+    <string name="incorrect_rss_url">Некаррэктная спасылка на RSS</string>
+    <string name="loading_failed">Не атрымалася загрузіць</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Адмена</string>
+    <string name="feed_loaded">Загружана</string>
+    <string name="feed_loading_failed">Не атрымалася загрузіць</string>
+    <string name="feed_item_loading_failed">Не атрымалася загрузіць</string>
+    <string name="feed_loaded_from_cache">Навіны узяты з кэшу!</string>
+    <string name="welcome_to_rss">Сардэчна запрашаем у свет RSS</string>
+    <string name="email">E-mail</string>
+    <string name="pphone">Тэлефон</string>
+    <string name="profile_name">Профіль</string>
+    <string name="news_name">Навіны</string>
+    <string name="favorites_name">Улюбёнае</string>
+    <string name="about_name">Інфа</string>
+    <string name="permission_description">Дадатку неабходна дазволіць чытаць дадзеныя аб телефоне, сетцы, каб паказаць IMEI</string>
+</resources>

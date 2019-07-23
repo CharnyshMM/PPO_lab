@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:isScrollContainer="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorPrimaryDark"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="10dp">
+
+            <ImageView
+                android:id="@+id/profile__avatarView"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_margin="9dp"
+                android:adjustViewBounds="true"
+                android:padding="3dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="fitCenter"
+                android:src="@drawable/default_avatar" />
+
+                <TextView
+                    android:id="@+id/profile__name_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif"
+
+                    android:textColor="@color/colorWhitePrimary"
+                    android:textSize="24sp"
+                    android:text="@string/DEFAULT_NAME"/>
+
+                <TextView
+                    android:id="@+id/profile__surname_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/colorWhitePrimary"
+                    android:textSize="24sp"
+                    android:text="@string/DEFAULT_NAME"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp">
+
+                <TextView
+                    android:id="@+id/profile__phone_label_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/pphone"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/profile__phone_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
+                    android:text="@string/default_phone"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp"
+                android:paddingStart="30dp"
+                android:paddingEnd="30dp">
+
+                <TextView
+                    android:id="@+id/profile__email_label_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_alignParentStart="true"
+                    android:textSize="20sp"
+                    android:text="E-mail:"/>
+
+                <TextView
+                    android:id="@+id/profile__email_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
+                    android:text="usermail@example.by"/>
+            </RelativeLayout>
+
+
+            <Button
+                android:id="@+id/profile__edit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/button_edit"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

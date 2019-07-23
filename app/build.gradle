@@ -1,0 +1,121 @@
+apply plugin: 'com.android.application'
+
+
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+def keystoreProperties = new Properties()
+
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
+
+android {
+    signingConfigs {
+        signingConfig {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+    def getCommitsCount = { ->
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-list', 'HEAD', '--count'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim().toInteger()
+    }
+
+    def getTag = { ->
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--tags'
+            standardOutput = stdout
+        }
+        def result = stdout.toString().trim().split('-');
+        if (result.length < 2)
+            return result[0] + ".0"
+        return result[0] + "." + result[1]
+    }
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.example.mikita.ppo_lab"
+        minSdkVersion 23
+        targetSdkVersion 28
+        versionCode getCommitsCount()
+        versionName getTag()
+        setProperty("archivesBaseName", "$applicationId-$versionName")
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signingConfig
+        }
+    }
+    flavorDimensions "version"
+    productFlavors {
+        general {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // This property is optional if you are using only one dimension.
+            dimension "version"
+            manifestPlaceholders.screenOrientation = "portrait"
+        }
+        dev {
+            dimension "version"
+            versionNameSuffix "-dev"
+            manifestPlaceholders.screenOrientation = "unspecified"
+        }
+    }
+}
+
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    def nav_version = "1.0.0-alpha07"
+
+    implementation "android.arch.navigation:navigation-fragment:$nav_version" // use -ktx for Kotlin
+    implementation "android.arch.navigation:navigation-ui:$nav_version" // use -ktx for Kotlin
+
+    // I set the version to be equal
+    // with the package above because of gradle error
+    // implementation 'com.google.firebase:firebase-database:16.0.1:16.0.0'
+    //implementation 'com.google.firebase:firebase-database:15.0.1:16.0.1'
+    implementation 'com.google.firebase:firebase-auth:16.0.1'
+    implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
+
+    implementation 'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+
+    implementation 'com.google.firebase:firebase-storage:16.0.1'
+    implementation 'com.firebaseui:firebase-ui-storage:4.1.0'
+
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+
+    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
+
+// Lifecycle components
+    implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
+
+    implementation 'com.google.code.gson:gson:2.8.5'
+}
+apply plugin: 'com.google.gms.google-services'

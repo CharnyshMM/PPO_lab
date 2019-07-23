@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/login__label_textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:text="@string/please_sign_in"
+            />
+        <Button
+            android:id="@+id/login__signin_button"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/login__label_textView"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="30dp"
+            android:text="@string/common_signin_button_text"/>
+
+    </RelativeLayout>
+    <!-- TODO: Update blank fragment layout -->
+
+
+</FrameLayout>
